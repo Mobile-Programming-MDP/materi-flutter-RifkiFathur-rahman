@@ -1,0 +1,102 @@
+[
+    {
+    "nama": "Budi Setiawan",
+    "umur": 30,
+    "alamat": {
+        "jalan": "JL. Pahlawan",
+        "kota": "Surabaya",
+        "provinsi": "Jawa Timur"
+    },
+    "hobi": ["membaca", "bersepeda" ]
+},
+{
+    "nama": "Ferdian Lubis",
+    "umur": 25,
+    "alamat": {
+        "jalan": "JL. Cipto",
+        "kota": "Jakarta",
+        "provinsi": "DKI Jakarta"
+    },
+    "hobi": ["menulis", "makan"]
+},
+{
+    "nama": "Budi Santoso",
+    "umur": 35,
+    "alamat": {
+        "jalan": "JL. Pahlawan",
+        "kota": "Palembang",
+        "provinsi": "Sumatera Selatan"
+    },
+    "hobi": ["membaca", "basket" ]
+},
+{
+    "nama": "Setiawan",
+    "umur": 20,
+    "alamat": {
+        "jalan": "JL. Anggrek",
+        "kota": "Surabaya",
+        "provinsi": "Jawa Timur"
+    },
+    "hobi": ["memasak", "touring" ]
+},
+{
+    "nama": "Budi Setiawan",
+    "umur": 30,
+    "alamat": {
+        "jalan": "JL. Pahlawan",
+        "kota": "Surabaya",
+        "provinsi": "Jawa Timur"
+    },
+    "hobi": ["membaca", "bersepeda" ]
+},
+{
+    "nama": "Budi Setiawan",
+    "umur": 30,
+    "alamat": {
+        "jalan": "JL. Pahlawan",
+        "kota": "Surabaya",
+        "provinsi": "Jawa Timur"
+    },
+    "hobi": ["membaca", "bersepeda" ]
+},
+{
+    "nama": "Budi Setiawan",
+    "umur": 30,
+    "alamat": {
+        "jalan": "JL. Pahlawan",
+        "kota": "Surabaya",
+        "provinsi": "Jawa Timur"
+    },
+    "hobi": ["membaca", "bersepeda" ]
+},
+{
+    "nama": "Budi Setiawan",
+    "umur": 30,
+    "alamat": {
+        "jalan": "JL. Pahlawan",
+        "kota": "Surabaya",
+        "provinsi": "Jawa Timur"
+    },
+    "hobi": ["membaca", "bersepeda" ]
+},
+{
+    "nama": "Budi Setiawan",
+    "umur": 30,
+    "alamat": {
+        "jalan": "JL. Pahlawan",
+        "kota": "Surabaya",
+        "provinsi": "Jawa Timur"
+    },
+    "hobi": ["membaca", "bersepeda" ]
+},
+{
+    "nama": "Budi Setiawan",
+    "umur": 30,
+    "alamat": {
+        "jalan": "JL. Pahlawan",
+        "kota": "Surabaya",
+        "provinsi": "Jawa Timur"
+    },
+    "hobi": ["membaca", "bersepeda" ]
+}
+]
