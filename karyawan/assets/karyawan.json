@@ -1,102 +1,82 @@
 [
     {
-    "nama": "Budi Setiawan",
-    "umur": 30,
-    "alamat": {
-        "jalan": "JL. Pahlawan",
-        "kota": "Surabaya",
-        "provinsi": "Jawa Timur"
+        "nama": "Budi Setiawan",
+        "umur": 30,
+        "alamat": {
+            "jalan": "Jl. Pahlawan",
+            "kota": "Surabaya",
+            "provinsi": "Jawa Timur"
+        },
+        "hobi": ["membaca", "bersepeda"]
     },
-    "hobi": ["membaca", "bersepeda" ]
-},
-{
-    "nama": "Ferdian Lubis",
-    "umur": 25,
-    "alamat": {
-        "jalan": "JL. Cipto",
-        "kota": "Jakarta",
-        "provinsi": "DKI Jakarta"
+    {
+        "nama": "Ferdinan Lubis",
+        "umur": 25,
+        "alamat": {
+            "jalan": "Jl. Cipto",
+            "kota": "Jakarta",
+            "provinsi": "DKI Jakarta"
+        },
+        "hobi": ["menulis", "makan"]
     },
-    "hobi": ["menulis", "makan"]
-},
-{
-    "nama": "Budi Santoso",
-    "umur": 35,
-    "alamat": {
-        "jalan": "JL. Pahlawan",
-        "kota": "Palembang",
-        "provinsi": "Sumatera Selatan"
+    {
+        "nama": "Siti Nurhaliza",
+        "umur": 28,
+        "alamat": {
+            "jalan": "Jl. Ahmad Yani",
+            "kota": "Bandung",
+            "provinsi": "Jawa Barat"
+        },
+        "hobi": ["musik", "fotografi", "traveling"]
     },
-    "hobi": ["membaca", "basket" ]
-},
-{
-    "nama": "Setiawan",
-    "umur": 20,
-    "alamat": {
-        "jalan": "JL. Anggrek",
-        "kota": "Surabaya",
-        "provinsi": "Jawa Timur"
+    {
+        "nama": "Rendra Wijaya",
+        "umur": 32,
+        "alamat": {
+            "jalan": "Jl. Sudirman",
+            "kota": "Medan",
+            "provinsi": "Sumatera Utara"
+        },
+        "hobi": ["olahraga", "coding"]
     },
-    "hobi": ["memasak", "touring" ]
-},
-{
-    "nama": "Budi Setiawan",
-    "umur": 30,
-    "alamat": {
-        "jalan": "JL. Pahlawan",
-        "kota": "Surabaya",
-        "provinsi": "Jawa Timur"
+    {
+        "nama": "Dewi Lestari",
+        "umur": 26,
+        "alamat": {
+            "jalan": "Jl. Gatot Subroto",
+            "kota": "Yogyakarta",
+            "provinsi": "DI Yogyakarta"
+        },
+        "hobi": ["melukis", "dancing"]
     },
-    "hobi": ["membaca", "bersepeda" ]
-},
-{
-    "nama": "Budi Setiawan",
-    "umur": 30,
-    "alamat": {
-        "jalan": "JL. Pahlawan",
-        "kota": "Surabaya",
-        "provinsi": "Jawa Timur"
+    {
+        "nama": "Ahmad Hidayat",
+        "umur": 29,
+        "alamat": {
+            "jalan": "Jl. Merdeka",
+            "kota": "Bandung",
+            "provinsi": "Jawa Barat"
+        },
+        "hobi": ["gaming", "membaca novel"]
     },
-    "hobi": ["membaca", "bersepeda" ]
-},
-{
-    "nama": "Budi Setiawan",
-    "umur": 30,
-    "alamat": {
-        "jalan": "JL. Pahlawan",
-        "kota": "Surabaya",
-        "provinsi": "Jawa Timur"
+    {
+        "nama": "Lisa Manobal",
+        "umur": 27,
+        "alamat": {
+            "jalan": "Jl. Diponegoro",
+            "kota": "Semarang",
+            "provinsi": "Jawa Tengah"
+        },
+        "hobi": ["bernyanyi", "cooking", "gardening"]
     },
-    "hobi": ["membaca", "bersepeda" ]
-},
-{
-    "nama": "Budi Setiawan",
-    "umur": 30,
-    "alamat": {
-        "jalan": "JL. Pahlawan",
-        "kota": "Surabaya",
-        "provinsi": "Jawa Timur"
-    },
-    "hobi": ["membaca", "bersepeda" ]
-},
-{
-    "nama": "Budi Setiawan",
-    "umur": 30,
-    "alamat": {
-        "jalan": "JL. Pahlawan",
-        "kota": "Surabaya",
-        "provinsi": "Jawa Timur"
-    },
-    "hobi": ["membaca", "bersepeda" ]
-},
-{
-    "nama": "Budi Setiawan",
-    "umur": 30,
-    "alamat": {
-        "jalan": "JL. Pahlawan",
-        "kota": "Surabaya",
-        "provinsi": "Jawa Timur"
-    },
-    "hobi": ["membaca", "bersepeda" ]
-}
+    {
+        "nama": "Hendra Gunawan",
+        "umur": 31,
+        "alamat": {
+            "jalan": "Jl. Veteran",
+            "kota": "Malang",
+            "provinsi": "Jawa Timur"
+        },
+        "hobi": ["hiking", "fotografi"]
+    }
 ]
