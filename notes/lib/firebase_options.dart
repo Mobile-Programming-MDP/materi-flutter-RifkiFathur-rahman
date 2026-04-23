@@ -83,4 +83,5 @@ class DefaultFirebaseOptions {
     authDomain: 'notes-913aa.firebaseapp.com',
     storageBucket: 'notes-913aa.firebasestorage.app',
   );
+
 }
