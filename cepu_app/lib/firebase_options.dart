@@ -33,7 +33,10 @@ class DefaultFirebaseOptions {
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.windows:
-        return windows;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for windows - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -47,30 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBfEtWWZJvsqKRJEOZ6DYAWTzM9a7EPiTA',
-    appId: '1:434301581436:web:020512751ba2f6279e31f9',
-    messagingSenderId: '434301581436',
-    projectId: 'cepu-app',
-    authDomain: 'cepu-app.firebaseapp.com',
-    storageBucket: 'cepu-app.firebasestorage.app',
-    measurementId: 'G-ZHFX7GGDYE',
+    apiKey: 'AIzaSyA_vW1jNBvcD6zRoq9lf1jQBVxSsZtIpEM',
+    appId: '1:98153141169:web:7fe074049678f87d6fe390',
+    messagingSenderId: '98153141169',
+    projectId: 'first-app-9395e',
+    authDomain: 'first-app-9395e.firebaseapp.com',
+    storageBucket: 'first-app-9395e.firebasestorage.app',
+    measurementId: 'G-S098MH2GK4',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBUkzgx3BSsAGFBYkpNnXM7KpLv3Ddp1W4',
-    appId: '1:434301581436:android:47361723c2b9b7809e31f9',
-    messagingSenderId: '434301581436',
-    projectId: 'cepu-app',
-    storageBucket: 'cepu-app.firebasestorage.app',
-  );
-
-  static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyBfEtWWZJvsqKRJEOZ6DYAWTzM9a7EPiTA',
-    appId: '1:434301581436:web:6e71dfcf087abed19e31f9',
-    messagingSenderId: '434301581436',
-    projectId: 'cepu-app',
-    authDomain: 'cepu-app.firebaseapp.com',
-    storageBucket: 'cepu-app.firebasestorage.app',
-    measurementId: 'G-X4HVMCC1S9',
+    apiKey: 'AIzaSyASfRdwjmsplufbeLOfMRQbiYthaR1vfhI',
+    appId: '1:98153141169:android:dbb865eb1c5f01ef6fe390',
+    messagingSenderId: '98153141169',
+    projectId: 'first-app-9395e',
+    storageBucket: 'first-app-9395e.firebasestorage.app',
   );
 }
