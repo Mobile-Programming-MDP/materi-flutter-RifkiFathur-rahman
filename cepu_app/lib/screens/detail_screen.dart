@@ -5,6 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/post.dart';
 import '../util/file_image_helper.dart';
+import '../screens/map_detail_screen.dart'; // 🔥 TAMBAHAN
 
 class DetailScreen extends StatelessWidget {
   final Post post;
@@ -13,9 +14,9 @@ class DetailScreen extends StatelessWidget {
 
   Future<void> _openMap(BuildContext context) async {
     if (post.latitude == null || post.longitude == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Lokasi tidak tersedia.')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Lokasi tidak tersedia.')));
       return;
     }
 
@@ -39,7 +40,8 @@ class DetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LatLng? postLocation = (post.latitude != null && post.longitude != null)
+    final LatLng? postLocation =
+        (post.latitude != null && post.longitude != null)
         ? LatLng(double.parse(post.latitude!), double.parse(post.longitude!))
         : null;
 
@@ -54,91 +56,61 @@ class DetailScreen extends StatelessWidget {
         foregroundColor: Colors.black,
         elevation: 0,
         actions: [
-          IconButton(
-            onPressed: () {
-              // Action for sharing or bookmarking could go here
-            },
-            icon: const Icon(Icons.share_outlined),
-          ),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.share_outlined)),
         ],
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image Section
+            // IMAGE
             if (post.image != null && post.image!.isNotEmpty)
               _buildImage(post.image!)
             else
               Container(
                 height: 250,
                 width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.image_not_supported_outlined, size: 64, color: Colors.grey[400]),
-                    const SizedBox(height: 8),
-                    Text("Gambar tidak tersedia", style: TextStyle(color: Colors.grey[600])),
-                  ],
+                color: Colors.grey[200],
+                child: const Center(
+                  child: Icon(Icons.image_not_supported, size: 60),
                 ),
               ),
 
             Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Category Badge
+                  // CATEGORY
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: Theme.of(context).primaryColor.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: Text(
-                      post.category ?? "Umum",
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).primaryColor,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
+                    child: Text(post.category ?? "Umum"),
                   ),
+
                   const SizedBox(height: 16),
 
-                  // Description
+                  // DESCRIPTION
                   Text(
-                    post.description ?? "Tidak ada deskripsi.",
-                    style: const TextStyle(
-                      fontSize: 18,
-                      height: 1.6,
-                      color: Colors.black87,
-                      fontWeight: FontWeight.w400,
-                    ),
+                    post.description ?? "-",
+                    style: const TextStyle(fontSize: 16),
                   ),
-                  const SizedBox(height: 24),
-                  const Divider(),
-                  const SizedBox(height: 16),
 
-                  // Map Preview Section
-                  const Text(
-                    "Lokasi Kejadian",
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black54),
-                  ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 20),
+
+                  // MAP PREVIEW
+                  const Text("Lokasi Kejadian"),
+                  const SizedBox(height: 10),
+
                   if (postLocation != null)
                     Container(
                       height: 200,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: Colors.grey[300]!),
-                      ),
-                      clipBehavior: Clip.antiAlias,
                       child: GoogleMap(
                         initialCameraPosition: CameraPosition(
                           target: postLocation,
@@ -146,117 +118,56 @@ class DetailScreen extends StatelessWidget {
                         ),
                         markers: {
                           Marker(
-                            markerId: const MarkerId("post_loc"),
+                            markerId: const MarkerId("loc"),
                             position: postLocation,
                           ),
                         },
-                        // Disable gestures for static preview feel
-                        rotateGesturesEnabled: false,
-                        scrollGesturesEnabled: false,
-                        tiltGesturesEnabled: false,
                         zoomGesturesEnabled: false,
-                        myLocationButtonEnabled: false,
-                        mapToolbarEnabled: false,
+                        scrollGesturesEnabled: false,
                       ),
                     )
                   else
-                    Container(
-                      height: 100,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[100],
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Center(child: Text("Lokasi tidak tersedia")),
-                    ),
-                  const SizedBox(height: 24),
+                    const Text("Lokasi tidak tersedia"),
 
-                  // User Info
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: Colors.blue.withOpacity(0.1),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(Icons.person_outline, color: Colors.blue),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              "Dilaporkan oleh",
-                              style: TextStyle(fontSize: 12, color: Colors.grey, fontWeight: FontWeight.w500),
-                            ),
-                            Text(
-                              post.fullName ?? "Anonim",
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 30),
 
-                  // Date Info
-                  if (post.createdAt != null)
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: Colors.green.withOpacity(0.1),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(Icons.calendar_today_outlined, color: Colors.green, size: 20),
-                        ),
-                        const SizedBox(width: 16),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              "Tanggal Laporan",
-                              style: TextStyle(fontSize: 12, color: Colors.grey, fontWeight: FontWeight.w500),
-                            ),
-                            Text(
-                              _formatDate(post.createdAt!.toDate()),
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-
-                  const SizedBox(height: 40),
-
-                  // Action Button
+                  // 🔥 TOMBOL 1 (lama)
                   ElevatedButton.icon(
                     onPressed: () => _openMap(context),
-                    icon: const Icon(Icons.location_on_outlined),
-                    label: const Text("Lihat Lokasi di Google Maps"),
+                    icon: const Icon(Icons.location_on),
+                    label: const Text("Buka di Google Maps"),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).primaryColor,
-                      foregroundColor: Colors.white,
-                      minimumSize: const Size(double.infinity, 56),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      elevation: 2,
+                      minimumSize: const Size(double.infinity, 50),
                     ),
                   ),
-                  const SizedBox(height: 20),
+
+                  const SizedBox(height: 12),
+
+                  // 🔥 TOMBOL 2 (BARU)
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      if (postLocation != null) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => MapDetailScreen(post: post),
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Lokasi tidak tersedia"),
+                          ),
+                        );
+                      }
+                    },
+                    icon: const Icon(Icons.map),
+                    label: const Text("Lihat di Dalam Aplikasi"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      minimumSize: const Size(double.infinity, 50),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -272,7 +183,7 @@ class DetailScreen extends StatelessWidget {
         imagePath,
         fit: BoxFit.cover,
         width: double.infinity,
-        height: 280,
+        height: 250,
       );
     }
     try {
@@ -280,32 +191,10 @@ class DetailScreen extends StatelessWidget {
         base64Decode(imagePath),
         fit: BoxFit.cover,
         width: double.infinity,
-        height: 280,
-        errorBuilder: (context, error, stackTrace) {
-          // If decoding failed, it might be a file path (on mobile)
-          if (!kIsWeb) {
-            return buildFileImage(imagePath);
-          }
-          return _buildErrorWidget();
-        },
+        height: 250,
       );
     } catch (e) {
-      if (!kIsWeb) {
-        return buildFileImage(imagePath);
-      }
-      return _buildErrorWidget();
+      return buildFileImage(imagePath);
     }
-  }
-
-  Widget _buildErrorWidget() {
-    return Container(
-      height: 280,
-      color: Colors.grey[200],
-      child: const Icon(Icons.broken_image_outlined, size: 64, color: Colors.grey),
-    );
-  }
-
-  String _formatDate(DateTime date) {
-    return "${date.day}/${date.month}/${date.year} ${date.hour}:${date.minute.toString().padLeft(2, '0')}";
   }
 }

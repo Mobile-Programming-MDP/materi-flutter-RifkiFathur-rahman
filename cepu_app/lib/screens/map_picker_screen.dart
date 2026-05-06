@@ -33,7 +33,9 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
 
     try {
       final position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
       );
       setState(() {
         _selectedLocation = LatLng(position.latitude, position.longitude);
@@ -41,7 +43,10 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
       });
     } catch (e) {
       setState(() {
-        _selectedLocation = const LatLng(-6.2000, 106.8167); // Jakarta as fallback
+        _selectedLocation = const LatLng(
+          -6.2000,
+          106.8167,
+        ); // Jakarta as fallback
         _isLoading = false;
       });
     }
@@ -96,7 +101,9 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                     child: const Text("Konfirmasi Lokasi"),
                   ),
