@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:cepu_app/models/post.dart';
 import 'package:cepu_app/screens/map_picker_screen.dart';
 import 'package:cepu_app/services/post_service.dart';
@@ -366,4 +367,48 @@ class _AddPostScreenState extends State<AddPostScreen> {
             ),
     );
   }
+  Future<void> _generateDescriptionWithAI() async {
+    if (_base64Image == null) return;
+    setState(() => _isGenerating = true);
+    try {
+      const apikey = ''
+      const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:streamGenerateContent?key=';
+      final body = jsonEncode({
+        "contents": [
+          {
+            "parts": [
+              {
+                "inlineData": {"mineType": "image/jpeg", "data": _base64Image},
+              },
+              {
+                "text": 
+                    "Berdasarkan foto ini, identifikasi satu kategori utama kerusakan fasilitas umum"
+                    "dari daftar berikut: Jalan Rusak, Lampu Jalan Mati, Lawan Arah, Merokok di Jalan, Tidak pakai helm dan lainnya. "
+                    "pilih kategori yang paling dominan atau paling mendesak untuk dilaporkan. "
+                    "Buat deskripsi singkat untuk laporan perbaikan, dan tambahkan permohonan perbaikan"
+                    "Fokus pada kerusakan yang terlihat dan hindari spekulasi. \n\n"
+                    "Format output yang diinginkan:\n"
+                    "Kategori: [satu kategori yang dipilih]\n"
+                    "Deskripsi: [deskripsi singkat]",
+              },
+            ],
+          },
+        ],
+      });
+      final headers = {'Content-Type': 'application/json'};
+      final response = await http.post(
+        Uri.parse(url),
+        headers: headers,
+        body: body,
+      );
+      if (response.statusCode == 200) { 
+      } else {
+        debugPrint('Request failed: ${response.body}');
+      }
+    } catch (e) {
+      debugPrint('Failed to generate AI description: $e');
+    } finally {
+      if (mounted) setState(() => _isGenerating = false);
+    }
+   }
 }
