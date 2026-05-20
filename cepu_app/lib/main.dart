@@ -1,9 +1,16 @@
+import 'dart:convert';
+import 'package:fasum/firebase_options.dart'
+import 'package:fasum/screens/splash_screen.dart';
 import 'package:cepu_app/firebase_options.dart';
 import 'package:cepu_app/screens/main_screen.dart';
 import 'package:cepu_app/screens/sign_in_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,10 +33,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
         fontFamily: 'Roboto', // Using a standard clean font
-        appBarTheme: const AppBarTheme(
-          centerTitle: true,
-          elevation: 0,
-        ),
+        appBarTheme: const AppBarTheme(centerTitle: true, elevation: 0),
       ),
       home: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
