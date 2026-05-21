@@ -1,11 +1,11 @@
+import 'package:cepu_app/models/post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import '../models/post.dart';
 
+// Install depencies flutter_map dan latlong2
 class MapDetailScreen extends StatefulWidget {
   final Post post;
-
   const MapDetailScreen({super.key, required this.post});
 
   @override
@@ -13,49 +13,41 @@ class MapDetailScreen extends StatefulWidget {
 }
 
 class _MapDetailScreenState extends State<MapDetailScreen> {
-  late LatLng lokasi;
-
-  @override
-  void initState() {
-    super.initState();
-
-    // Ambil dari post (string → double)
-    lokasi = LatLng(
-      double.parse(widget.post.latitude!),
-      double.parse(widget.post.longitude!),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    final lat = double.tryParse(widget.post.latitude ?? '');
+    final lng = double.tryParse(widget.post.longitude ?? '');
+    final hasLocation = lat != null && lng != null;
+    final point = hasLocation ? LatLng(lat,lng) : const LatLng(0, 0);
     return Scaffold(
-      appBar: AppBar(title: const Text("Peta Lokasi")),
-      body: FlutterMap(
-        options: MapOptions(initialCenter: lokasi, initialZoom: 15),
-        children: [
-          // 🌍 Map layer (OpenStreetMap)
-          TileLayer(
-            urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-            userAgentPackageName: "com.example.cepu_app",
-          ),
-
-          // 📍 Marker
-          MarkerLayer(
-            markers: [
-              Marker(
-                point: lokasi,
-                width: 80,
-                height: 80,
-                child: const Icon(
-                  Icons.location_on,
-                  color: Colors.red,
-                  size: 40,
+      appBar: AppBar(title: Text(widget.post.category ?? 'Map Detail')),
+      body: hasLocation
+        ? FlutterMap(
+          options: MapOptions(initialCenter: point, initialZoom: 15),
+          children: [
+            TileLayer(
+              urlTemplate: 'https:/tile.openstreetmap.org/{z}/{x}/{y}.png',
+              userAgentPackageName: 'com.example.cepu_app',
+            ),
+            MarkerLayer(
+              markers: [
+                Marker(
+                  point: point, 
+                  width: 48,
+                  height: 48,
+                  child: const Icon(
+                    Icons.location_pin,
+                    color: Colors.red,
+                    size: 48,
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
-      ),
+              ],
+            ),
+          ],
+        )
+      : const Center(
+          child: Text('No location data available for this post.'),
+        ),
     );
   }
 }

@@ -10,40 +10,15 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  //1. Tambahkan name controller
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  final _nameController = TextEditingController();
 
-  void _registerAccount() async {
-    if (_passwordController.text != _confirmPasswordController.text) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("password dan konfirmasi password tidak sama"),
-        ),
-      );
-    } else {
-      try {
-        UserCredential userCredential = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-              email: _emailController.text,
-              password: _passwordController.text,
-            );
-        userCredential.user?.updateDisplayName(_nameController.text);
-
-        if (mounted) {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const SignInScreen()),
-          );
-        }
-      } on FirebaseAuthException catch (e) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Gagal Mendaftar : ${e.message}')),
-          );
-        }
-      }
-    }
+  String generateAvatarUrl(String? fullName) {
+    final formattedName = fullName!.trim().replaceAll('', '+');
+    return 'https://ui-avatars.com/api/?name=$formattedName&color=FFFFFF&background-000000';
   }
 
   @override
@@ -55,13 +30,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: Column(
           children: [
             const SizedBox(height: 32.0),
+            //2. Tambahkan TextField Display
             TextField(
               controller: _nameController,
               decoration: const InputDecoration(
-                labelText: 'name',
+                labelText: 'Display Name',
                 border: OutlineInputBorder(),
               ),
             ),
+            
+            const SizedBox(height: 16.0),
             TextField(
               controller: _emailController,
               decoration: const InputDecoration(
@@ -69,6 +47,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 border: OutlineInputBorder(),
               ),
             ),
+
             const SizedBox(height: 16.0),
             TextField(
               controller: _passwordController,
@@ -78,6 +57,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 border: OutlineInputBorder(),
               ),
             ),
+
             const SizedBox(height: 16.0),
             TextField(
               controller: _confirmPasswordController,
@@ -87,18 +67,51 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 border: OutlineInputBorder(),
               ),
             ),
+
             Container(
               margin: const EdgeInsets.only(top: 16.0),
               child: ElevatedButton(
                 onPressed: () {
                   _registerAccount();
-                },
+                }, 
                 child: const Text('Daftar'),
               ),
-            ),
+            )
           ],
         ),
       ),
     );
+  }
+
+  void _registerAccount() async {
+    if (_passwordController.text != _confirmPasswordController.text) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar (
+          content: Text('Password dan Konfirmasi Password Tidak Sama'),
+        ),
+      );
+    } else {
+      try {
+        // 3. Buat variabel userCredential dan set DisplayName
+        UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+            email: _emailController.text,
+            password: _passwordController.text
+          );
+        userCredential.user?.updateDisplayName(_nameController.text);
+
+        if (mounted) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const SignInScreen())
+          );
+        }
+      } on FirebaseAuthException catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Gagal Mendaftar : ${e.message}')),
+          );
+        }
+      }
+    }
   }
 }

@@ -1,173 +1,138 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
+
+import 'package:cepu_app/models/post.dart';
+import 'package:cepu_app/screens/map_detail_screen.dart';
+import 'package:cepu_app/services/post_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
-import '../models/post.dart';
-import '../util/file_image_helper.dart';
-import '../screens/map_detail_screen.dart'; // 🔥 TAMBAHAN
+import 'package:share_plus/share_plus.dart';
 
 class DetailScreen extends StatelessWidget {
   final Post post;
-
+  
   const DetailScreen({super.key, required this.post});
 
-  Future<void> _openMap(BuildContext context) async {
-    if (post.latitude == null || post.longitude == null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Lokasi tidak tersedia.')));
-      return;
-    }
-
-    final url = Uri.parse(
-      'https://www.google.com/maps/search/?api=1&query=${post.latitude},${post.longitude}',
+  Future<void> _deletePost(BuildContext context) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Delete Post'),
+        content: const Text('Are you sure you want to delete this post?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false), 
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true), 
+            child: const Text('Delete', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      )
     );
-    try {
-      if (await canLaunchUrl(url)) {
-        await launchUrl(url, mode: LaunchMode.externalApplication);
-      } else {
-        throw 'Tidak dapat membuka peta.';
-      }
-    } catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(e.toString())));
-      }
+    if (confirm == true) {
+      await PostService.deletePost(post);
+      if (context.mounted) Navigator.pop(context);
     }
+  }
+
+  void _sharePost() {
+    final text = 
+        '${post.category ?? ''}\n${post.description ?? ''}\nPosted by: ${post.userFullName ?? ''}';
+    SharePlus.instance.share(ShareParams(text: text));
   }
 
   @override
   Widget build(BuildContext context) {
-    final LatLng? postLocation =
-        (post.latitude != null && post.longitude != null)
-        ? LatLng(double.parse(post.latitude!), double.parse(post.longitude!))
-        : null;
+    final currentUserId = FirebaseAuth.instance.currentUser?.uid;
+    final isOwner = currentUserId != null && post.userId == currentUserId;
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: const Text(
-          "Detail Laporan",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
+        title: Text(post.category ?? 'Post Detail'),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.share_outlined)),
+          IconButton(
+            onPressed: _sharePost, 
+            icon: const Icon(Icons.share),
+            tooltip: 'Share',
+          ),
+          if (isOwner) 
+            IconButton(
+              onPressed: () => _deletePost(context), 
+              icon: const Icon(Icons.delete),
+              tooltip: 'Delete',
+              color: Colors.red,
+            ),
         ],
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // IMAGE
             if (post.image != null && post.image!.isNotEmpty)
-              _buildImage(post.image!)
-            else
-              Container(
-                height: 250,
+              Image.memory(
+                base64Decode(post.image!),
                 width: double.infinity,
-                color: Colors.grey[200],
-                child: const Center(
-                  child: Icon(Icons.image_not_supported, size: 60),
+                height: 250,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => const SizedBox(
+                  height: 250,
+                  child: Center(child: Icon(Icons.broken_image, size: 64)),
                 ),
               ),
-
             Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // CATEGORY
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(post.category ?? "Umum"),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  // DESCRIPTION
+                  if (post.category != null)
+                    Chip(label: Text(post.category!)),
+                  const SizedBox(height: 8),
                   Text(
-                    post.description ?? "-",
+                    post.description ?? '',
                     style: const TextStyle(fontSize: 16),
                   ),
-
-                  const SizedBox(height: 20),
-
-                  // MAP PREVIEW
-                  const Text("Lokasi Kejadian"),
-                  const SizedBox(height: 10),
-
-                  if (postLocation != null)
-                    Container(
-                      height: 200,
-                      child: GoogleMap(
-                        initialCameraPosition: CameraPosition(
-                          target: postLocation,
-                          zoom: 15,
-                        ),
-                        markers: {
-                          Marker(
-                            markerId: const MarkerId("loc"),
-                            position: postLocation,
-                          ),
-                        },
-                        zoomGesturesEnabled: false,
-                        scrollGesturesEnabled: false,
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      const Icon(Icons.person, size: 18, color: Colors.grey),
+                      const SizedBox(width: 4),
+                      Text(
+                        post.userFullName ?? 'Unknown',
+                        style: const TextStyle(color: Colors.grey),
                       ),
-                    )
-                  else
-                    const Text("Lokasi tidak tersedia"),
-
-                  const SizedBox(height: 30),
-
-                  // 🔥 TOMBOL 1 (lama)
-                  ElevatedButton.icon(
-                    onPressed: () => _openMap(context),
-                    icon: const Icon(Icons.location_on),
-                    label: const Text("Buka di Google Maps"),
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(double.infinity, 50),
-                    ),
+                    ],
                   ),
-
+                  if (post.latitude != null && post.longitude != null) ...[
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.location_on,
+                          size: 18,
+                          color: Colors.grey,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          '${post.latitude}, ${post.longitude}',
+                          style: const TextStyle(color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ],
                   const SizedBox(height: 12),
-
-                  // 🔥 TOMBOL 2 (BARU)
                   ElevatedButton.icon(
-                    onPressed: () {
-                      if (postLocation != null) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => MapDetailScreen(post: post),
-                          ),
-                        );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Lokasi tidak tersedia"),
-                          ),
-                        );
-                      }
-                    },
+                    onPressed:() {
+                      Navigator.push(
+                        context, 
+                        MaterialPageRoute(
+                          builder: (_) => MapDetailScreen(post: post), 
+                        ),
+                      );
+                    }, 
                     icon: const Icon(Icons.map),
-                    label: const Text("Lihat di Dalam Aplikasi"),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      minimumSize: const Size(double.infinity, 50),
-                    ),
-                  ),
+                    label: const Text('View on Map'),
+                  )
                 ],
               ),
             ),
@@ -175,26 +140,5 @@ class DetailScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Widget _buildImage(String imagePath) {
-    if (imagePath.startsWith('http')) {
-      return Image.network(
-        imagePath,
-        fit: BoxFit.cover,
-        width: double.infinity,
-        height: 250,
-      );
-    }
-    try {
-      return Image.memory(
-        base64Decode(imagePath),
-        fit: BoxFit.cover,
-        width: double.infinity,
-        height: 250,
-      );
-    } catch (e) {
-      return buildFileImage(imagePath);
-    }
   }
 }
